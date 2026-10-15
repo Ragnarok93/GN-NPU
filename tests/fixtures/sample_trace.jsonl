@@ -1,0 +1,5 @@
+{"schema_version":1,"event_id":"evt-001","session_id":"synthetic-session","timestamp_ns":1000000,"event_type":"pipeline_create","process_build":"synthetic-build","device_id":"synthetic-device-class","driver_id":"synthetic-driver","pipeline_key":"pipeline-a","outcome":"success"}
+{"schema_version":1,"event_id":"evt-002","session_id":"synthetic-session","timestamp_ns":1500000,"event_type":"cache_lookup","pipeline_key":"pipeline-a","cache_result":"miss"}
+{"schema_version":1,"event_id":"evt-003","session_id":"synthetic-session","timestamp_ns":2000000,"event_type":"shader_compile","pipeline_key":"pipeline-a","compile_duration_ns":250000,"outcome":"success"}
+{"schema_version":1,"event_id":"evt-004","session_id":"synthetic-session","timestamp_ns":3000000,"event_type":"frame_timing","frame_id":"frame-42","frame_duration_ns":16666667}
+{"schema_version":1,"event_id":"evt-005","session_id":"synthetic-session","timestamp_ns":4000000,"event_type":"stutter","frame_id":"frame-43","frame_duration_ns":40000000}
