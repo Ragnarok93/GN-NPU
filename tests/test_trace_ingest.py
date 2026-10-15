@@ -77,7 +77,8 @@ def test_event_type_specific_fields_are_required() -> None:
 
 def test_malformed_json_reports_source_line(tmp_path: Path) -> None:
     trace = tmp_path / "bad.jsonl"
-    trace.write_text('{"schema_version": 1}\n{broken\n', encoding="utf-8")
+    valid_event = FIXTURE.read_text(encoding="utf-8").splitlines()[0]
+    trace.write_text(f"{valid_event}\n{{broken\n", encoding="utf-8")
 
     with pytest.raises(TraceParseError, match=r"bad\.jsonl:2"):
         list(iter_normalized_events(trace))
