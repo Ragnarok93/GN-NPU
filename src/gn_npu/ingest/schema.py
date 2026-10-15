@@ -70,9 +70,8 @@ def validate_event(event: Any) -> dict[str, Any]:
     if missing:
         raise TraceValidationError(f"missing required field(s): {', '.join(sorted(missing))}")
 
-    if event["schema_version"] != SCHEMA_VERSION or isinstance(
-        event["schema_version"], bool
-    ):
+    version = event["schema_version"]
+    if isinstance(version, bool) or not isinstance(version, int) or version != SCHEMA_VERSION:
         raise TraceValidationError(
             f"'schema_version' must equal supported version {SCHEMA_VERSION}"
         )
@@ -105,13 +104,17 @@ def validate_event(event: Any) -> dict[str, Any]:
         if field in event:
             _require_nonnegative_int(event, field)
 
-    if "outcome" in event and event["outcome"] not in OUTCOMES:
-        raise TraceValidationError(
-            f"'outcome' must be one of: {', '.join(sorted(OUTCOMES))}"
-        )
-    if "cache_result" in event and event["cache_result"] not in CACHE_RESULTS:
-        raise TraceValidationError(
-            f"'cache_result' must be one of: {', '.join(sorted(CACHE_RESULTS))}"
-        )
+    if "outcome" in event:
+        outcome = event["outcome"]
+        if not isinstance(outcome, str) or outcome not in OUTCOMES:
+            raise TraceValidationError(
+                f"'outcome' must be one of: {', '.join(sorted(OUTCOMES))}"
+            )
+    if "cache_result" in event:
+        cache_result = event["cache_result"]
+        if not isinstance(cache_result, str) or cache_result not in CACHE_RESULTS:
+            raise TraceValidationError(
+                f"'cache_result' must be one of: {', '.join(sorted(CACHE_RESULTS))}"
+            )
 
     return dict(event)
