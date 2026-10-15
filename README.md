@@ -13,9 +13,11 @@ synchronization, resource lifetimes, and safe fallback behavior.
 
 ## Milestones
 
-1. Define a versioned trace schema and collect representative runtime events.
-2. Parse and normalize logs into reproducible datasets.
-3. Establish heuristic baselines before training learned models.
+1. **Initial contract implemented:** versioned trace schema v1 and synthetic fixture.
+2. **Initial ingestion implemented:** strict JSONL validation, normalized rows,
+   source-line provenance, and Parquet output.
+3. Next: validate against representative real traces and establish a heuristic
+   baseline before training learned models.
 4. Evaluate on held-out sessions and workloads.
 5. Integrate a bounded, optional prewarming experiment into GameNative/DXVK.
 6. Evaluate CPU inference before investigating vendor-specific NPU APIs.
@@ -33,6 +35,19 @@ pytest
 ruff check .
 ```
 
+## Normalize a trace
+
+The checked-in example is synthetic and safe for public CI:
+
+```bash
+python scripts/normalize_traces.py tests/fixtures/sample_trace.jsonl data/processed/sample.parquet
+```
+
+The parser rejects malformed records, unsupported schema versions, unknown
+fields, invalid values, and duplicate event IDs within a session. It preserves
+missing values and records the source filename and line number for each event.
+See [docs/data-schema.md](docs/data-schema.md) for the v1 contract.
+
 ## Data policy
 
 Do not commit raw gameplay logs, shader/pipeline caches, private captures,
@@ -42,5 +57,7 @@ conditions for every dataset used in evaluation.
 
 ## Current status
 
-Scaffold stage. No trained model, validated predictor, runtime integration, or
-on-device performance improvement is claimed.
+Trace schema v1, JSONL validation, and a Parquet normalization path are
+implemented, but still require CI execution and validation against representative
+GameNative/DXVK captures. No trained model, validated predictor, runtime
+integration, or on-device performance improvement is claimed.
